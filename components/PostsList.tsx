@@ -22,7 +22,7 @@ export const PostsList: FC = () => {
 
   return (
     <>
-      <div className='m-auto overflow-y-scroll no-scrollbar'>
+      <div className='grid grid-cols-1 gap-y-[6px] m-auto overflow-y-scroll no-scrollbar'>
         {data.posts.map(({ author, title, content, createdAt }: { author: string; title: string; content: string; createdAt: string }, index: number) => (
           <Post author={author} title={title} content={content} createdAt={createdAt} key={index} />
         ))}
