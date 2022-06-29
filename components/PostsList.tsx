@@ -7,8 +7,10 @@ export const PostsList: FC = () => {
   const query = gql`
     query posts {
       posts {
+        author
         title
         content
+        createdAt
       }
     }
   `;
@@ -21,8 +23,8 @@ export const PostsList: FC = () => {
   return (
     <>
       <div className='m-auto overflow-y-scroll no-scrollbar'>
-        {data.posts.map(({ title, content }: { title: string; content: string }, index: number) => (
-          <Post title={title} content={content} key={index} />
+        {data.posts.map(({ author, title, content, createdAt }: { author: string; title: string; content: string; createdAt: string }, index: number) => (
+          <Post author={author} title={title} content={content} createdAt={createdAt} key={index} />
         ))}
       </div>
     </>
