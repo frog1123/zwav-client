@@ -1,5 +1,7 @@
 import type { FC } from 'react';
+import { useContext } from 'react';
 import { gql, useQuery } from '@apollo/client';
+import { UserContext } from '../UserContext';
 
 import { Post } from './Post';
 
@@ -15,7 +17,14 @@ export const PostsList: FC = () => {
     }
   `;
 
-  const { error, loading, data } = useQuery(query);
+  const { value, setValue } = useContext(UserContext);
+
+  const { error, loading, data, refetch } = useQuery(query);
+
+  if (value.reloadPostsList === true) {
+    refetch();
+    setValue({ reloadPostsList: false });
+  }
 
   if (loading) return <h1>loading</h1>;
   if (error) return <h1>error</h1>;
