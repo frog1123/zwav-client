@@ -5,8 +5,18 @@
 html,
 body {
   height: 100%;
+  min-height: 100%;
+}
+
+#__next {
+  height: 100%;
 }
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+[contentEditable='true']:empty:not(:focus):before {
+  color: #424549;
+  content: attr(placeholder);
 }

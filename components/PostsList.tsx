@@ -1,34 +1,27 @@
 import type { FC } from 'react';
+import { gql, useQuery } from '@apollo/client';
 
 import { Post } from './Post';
 
 export const PostsList: FC = () => {
-  const posts = [
-    { title: 'title1', content: 'content1' },
-    { title: 'title2', content: 'content2' },
-    { title: 'title3', content: 'content3' },
-    { title: 'title1', content: 'content1' },
-    { title: 'title2', content: 'content2' },
-    { title: 'title3', content: 'content3' },
-    { title: 'title1', content: 'content1' },
-    { title: 'title2', content: 'content2' },
-    { title: 'title3', content: 'content3' },
-    { title: 'title1', content: 'content1' },
-    { title: 'title2', content: 'content2' },
-    { title: 'title3', content: 'content3' },
-    { title: 'title1', content: 'content1' },
-    { title: 'title2', content: 'content2' },
-    { title: 'title3', content: 'content3' },
-    { title: 'title1', content: 'content1' },
-    { title: 'title2', content: 'content2' },
-    { title: 'title3', content: 'content3' },
-    { title: 'title1', content: 'very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post very long post' }
-  ];
+  const query = gql`
+    query posts {
+      posts {
+        title
+        content
+      }
+    }
+  `;
+
+  const { error, loading, data } = useQuery(query);
+
+  if (loading) return <h1>loading</h1>;
+  if (error) return <h1>error</h1>;
 
   return (
     <>
       <div className='m-auto overflow-y-scroll no-scrollbar'>
-        {posts.map(({ title, content }, index) => (
+        {data.posts.map(({ title, content }: { title: string; content: string }, index: number) => (
           <Post title={title} content={content} key={index} />
         ))}
       </div>

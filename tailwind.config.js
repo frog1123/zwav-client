@@ -9,7 +9,9 @@ module.exports = {
           200: '#36393e',
           300: '#282b30',
           400: '#1e2124'
-        }
+        },
+        'zwav-purple': '#436ebc',
+        'zwav-red': '#f00'
       }
     }
   },

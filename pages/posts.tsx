@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 
 import { Navbar } from '../components/Navbar';
+import { CreatePost } from '../components/CreatePost';
 import { PostsList } from '../components/PostsList';
 import { FriendsList } from '../components/FriendsList';
 
@@ -12,8 +13,11 @@ const Posts: NextPage = () => {
         <div className='mr-[6px] ml-[6px]'>
           <FriendsList />
         </div>
-        <div className='pb-[50px] w-[100%] m-auto no-scrollbar'>
-          <PostsList />
+        <div className='grid grid-rows-[max-content_max_content]'>
+          <CreatePost />
+          <div className='mt-[15px] ]pb-[50px] w-[100%] m-auto no-scrollbar'>
+            <PostsList />
+          </div>
         </div>
       </div>
     </div>
