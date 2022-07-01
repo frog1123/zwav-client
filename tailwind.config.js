@@ -10,8 +10,8 @@ module.exports = {
           300: '#282b30',
           400: '#1e2124'
         },
-        'zwav-purple': '#436ebc',
-        'zwav-red': '#f00'
+        'zwav-color': '#a1375e',
+        'zwav-color-hover': '#a30d44'
       }
     }
   },

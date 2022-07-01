@@ -16,7 +16,20 @@ body {
   display: none;
 }
 
-[contentEditable='true']:empty:not(:focus):before {
-  color: #424549;
-  content: attr(placeholder);
+body::-webkit-scrollbar {
+  background-color: #36393e;
+}
+
+body::-webkit-scrollbar {
+  width: 12px;
+  background-color: #36393e;
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background: #888;
+}
+
+input[type='text'] {
+  line-height: 28px;
 }

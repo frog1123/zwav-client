@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import moment from 'moment';
+import { buffer } from 'stream/consumers';
 
 export const Post: FC<{ author: string; title: string; content?: string; createdAt: string }> = props => {
   return (
@@ -8,8 +9,8 @@ export const Post: FC<{ author: string; title: string; content?: string; created
         <h2 className='text-white text-sm'>{props.author}</h2>
         <h2 className='flex justify-end text-white text-sm'>{moment(parseFloat(props.createdAt)).fromNow()}</h2>
       </div>
-      <h1 className='text-white font-medium'>{props.title.replace(/&nbsp;/g, ' ')}</h1>
-      <h1 className='text-white'>{props.content?.replace(/&nbsp;/g, ' ')}</h1>
+      <h1 className='text-white font-medium'>{props.title}</h1>
+      <h1 className='text-white'>{props.content}</h1>
     </div>
   );
 };

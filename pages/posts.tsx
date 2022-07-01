@@ -20,7 +20,7 @@ const Posts: NextPage = () => {
         </div>
         <div className='grid grid-rows-[max-content_max_content]'>
           <CreatePost />
-          <div className='mt-[15px] pb-[50px] w-[100%] m-auto no-scrollbar'>
+          <div className='mt-[15px] pb-[50px] w-[100%] m-auto'>
             <PostsList />
           </div>
         </div>
