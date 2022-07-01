@@ -9,6 +9,7 @@ export const PostsList: FC = () => {
   const query = gql`
     query posts {
       posts {
+        id
         author
         title
         content
@@ -21,6 +22,8 @@ export const PostsList: FC = () => {
 
   const { error, loading, data, refetch } = useQuery(query);
 
+  console.log(data);
+
   if (value.reloadPostsList === true) {
     refetch();
     setValue({ reloadPostsList: false });
@@ -32,8 +35,8 @@ export const PostsList: FC = () => {
   return (
     <>
       <div className='grid grid-cols-1 gap-y-[6px] m-auto overflow-y-scroll no-scrollbar'>
-        {data.posts.map(({ author, title, content, createdAt }: { author: string; title: string; content: string; createdAt: string }, index: number) => (
-          <Post author={author} title={title} content={content} createdAt={createdAt} key={index} />
+        {data.posts.map(({ id, author, title, content, createdAt }: { id: string; author: string; title: string; content: string; createdAt: string }, index: number) => (
+          <Post id={id} author={author} title={title} content={content} createdAt={createdAt} key={index} />
         ))}
       </div>
     </>
