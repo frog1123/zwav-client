@@ -15,7 +15,6 @@ const Post: NextPage = ({ post }: any) => {
       </Head>
       <Navbar />
       <div className='pt-[80px]'>
-        <h1 className='text-white'>u r on post {useRouter().query.id}</h1>
         <h2 className='text-white'>id: {post.id}</h2>
         <h2 className='text-white'>author: {post.author}</h2>
         <h2 className='text-white'>title: {post.title}</h2>
