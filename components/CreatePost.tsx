@@ -2,6 +2,8 @@ import { FC, useContext } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { UserContext } from '../UserContext';
 
+import TextareaAutosize from 'react-textarea-autosize';
+
 export const CreatePost: FC = () => {
   let title: string | undefined, content: string | undefined;
 
@@ -44,9 +46,9 @@ export const CreatePost: FC = () => {
   return (
     <>
       <div className='grid grid-rows-[max-content_max-content] bg-zwav-gray-300 p-[8px] rounded-[8px] gap-y-[6px]'>
-        <textarea id='title' placeholder='title (required)' className='bg-zwav-gray-400 rounded-[6px] pl-[4px] pr-[2px] outline-none overflow-x-hidden text-white no-scrollbar resize-none'></textarea>
-        <textarea id='content' placeholder='content' className='bg-zwav-gray-400 rounded-[6px] pl-[4px] pr-[2px] outline-none text-white pb-[80px] no-scrollbar resize-none'></textarea>
-        <button onClick={() => submitPost()} className='w-[80px] rounded-[8px] transition ease-in-out bg-zwav-color hover:bg-zwav-color-hover duration-[0.25s]'>
+        <TextareaAutosize id='title' placeholder='title (required)' className='bg-zwav-gray-400 rounded-[6px] pl-[4px] pr-[2px] outline-none overflow-x-hidden text-white no-scrollbar resize-none' />
+        <TextareaAutosize id='content' placeholder='content' className='bg-zwav-gray-400 rounded-[6px] pl-[4px] pr-[2px] outline-none text-white pb-[80px] no-scrollbar resize-none' />
+        <button onClick={() => submitPost()} className='w-[80px] rounded-[8px] transition ease-in-out border-none bg-zwav-color hover:bg-zwav-color-hover duration-[0.25s]'>
           <h2 className='text-white'>post</h2>
         </button>
       </div>

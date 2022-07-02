@@ -8,7 +8,8 @@ import { UserContext } from '../UserContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [value, setValue] = useState({
-    reloadPostsList: false
+    reloadPostsList: false,
+    reloadCommentsList: false
   });
 
   return (

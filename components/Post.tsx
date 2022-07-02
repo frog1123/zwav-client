@@ -11,7 +11,7 @@ export const Post: FC<{ id: string; author: string; title: string; content?: str
         <h2 className='flex justify-end text-white text-sm'>{moment(parseFloat(props.createdAt)).fromNow()}</h2>
       </div>
       <Link href={`${useRouter().asPath}/${props.id}`}>
-        <h1 className='text-white font-medium cursor-pointer w-[max-content]'>{props.title}</h1>
+        <h1 className='text-white font-medium cursor-pointer'>{props.title}</h1>
       </Link>
       <h1 className='text-white'>{props.content}</h1>
     </div>

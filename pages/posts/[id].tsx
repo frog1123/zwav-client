@@ -1,12 +1,14 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { gql } from '@apollo/client';
-import client from '../../apollo-client';
+import { gql, useQuery } from '@apollo/client';
 import moment from 'moment';
 
 import { Navbar } from '../../components/Navbar';
 import { FriendsList } from '../../components/FriendsList';
+import { CreateComment } from '../../components/CreateComment';
+import { useContext } from 'react';
+import { UserContext } from '../../UserContext';
 
 interface Post {
   author: string;
@@ -16,45 +18,7 @@ interface Post {
   comments?: Array<{ author: string; content: string; createdAt: string }>;
 }
 
-const Post: NextPage<{ post: Post }> = ({ post }) => {
-  console.log(post);
-
-  return (
-    <div className='bg-zwav-gray-200 min-h-[100vh]'>
-      <Head>
-        <title>{post.title} - zwav</title>
-        <link rel='icon' href='/zwav_logo.svg' />
-      </Head>
-      <Navbar />
-      <div className='grid grid-cols-[12%_80%] pt-[80px] '>
-        <div className='mr-[6px] ml-[6px]'>
-          <FriendsList />
-        </div>
-        <div className='bg-zwav-gray-300 rounded-[8px] p-[4px]'>
-          <div className='grid grid-cols-2'>
-            <h2 className='text-white'>posted by {post.author}</h2>
-            <h2 className='flex justify-end text-white'>{moment(parseFloat(post.createdAt)).fromNow()}</h2>
-          </div>
-          <h2 className='text-white font-medium'>{post.title}</h2>
-          <h2 className='text-white'>{post.content}</h2>
-          <div className='bg-zwav-gray-100 h-[2px] w-[100%] rounded-[1px]'></div>
-
-          {post.comments.map((comment: any) => (
-            <div>
-              <div className='grid grid-cols-2'>
-                <h2 className='text-white font-medium'>{comment.author}</h2>
-                <h2 className='flex justify-end text-white'>{moment(parseFloat(comment.createdAt)).fromNow()}</h2>
-              </div>
-              <h2 className='text-white'>{comment.content}</h2>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export async function getServerSideProps({ params }: any) {
+const Post: NextPage = () => {
   const query = gql`
     query post($id: ID!) {
       post(id: $id) {
@@ -72,8 +36,51 @@ export async function getServerSideProps({ params }: any) {
     }
   `;
 
-  const { data } = await client.query({ query, variables: { id: params.id } });
-  return { props: { post: data.post } };
-}
+  const { value, setValue } = useContext(UserContext);
+  const { error, loading, data, refetch } = useQuery(query, { variables: { id: useRouter().query.id } });
+
+  if (value.reloadCommentsList) {
+    refetch();
+    setValue({ reloadCommentsList: false });
+  }
+
+  if (loading) return <h1>loading</h1>;
+  if (error) return <h1>error</h1>;
+
+  return (
+    <div className='bg-zwav-gray-200 min-h-[100vh]'>
+      <Head>
+        <title>{data.post.title} - zwav</title>
+        <link rel='icon' href='/zwav_logo.svg' />
+      </Head>
+      <Navbar />
+      <div className='grid grid-cols-[12%_80%] pt-[80px] pb-[50px]'>
+        <div className='mr-[6px] ml-[6px]'>
+          <FriendsList />
+        </div>
+        <div className='bg-zwav-gray-300 rounded-[8px] p-[4px]'>
+          <div className='grid grid-cols-2'>
+            <h2 className='text-white'>posted by {data.post.author}</h2>
+            <h2 className='flex justify-end text-white'>{moment(parseFloat(data.post.createdAt)).fromNow()}</h2>
+          </div>
+          <h2 className='text-white font-medium break-words'>{data.post.title}</h2>
+          <h2 className='text-white break-words'>{data.post.content}</h2>
+          <div className='bg-zwav-gray-100 h-[2px] w-[100%] rounded-[1px]'></div>
+          <CreateComment postId={useRouter().query.id.toString()} />
+
+          {data.post.comments.map((comment: any, index: number) => (
+            <div key={index}>
+              <div className='grid grid-cols-2'>
+                <h2 className='text-white font-medium'>{comment.author}</h2>
+                <h2 className='flex justify-end text-white'>{moment(parseFloat(comment.createdAt)).fromNow()}</h2>
+              </div>
+              <h2 className='text-white'>{comment.content}</h2>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Post;

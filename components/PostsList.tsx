@@ -19,10 +19,9 @@ export const PostsList: FC = () => {
   `;
 
   const { value, setValue } = useContext(UserContext);
-
   const { error, loading, data, refetch } = useQuery(query);
 
-  if (value.reloadPostsList === true) {
+  if (value.reloadPostsList) {
     refetch();
     setValue({ reloadPostsList: false });
   }
