@@ -5,7 +5,7 @@ import { UserContext } from '../UserContext';
 export const CreatePost: FC = () => {
   let title: string | undefined, content: string | undefined;
 
-  const getPostInput = (): any => {
+  const getPostInput = (): { title: string; content: string } => {
     if (typeof window !== 'undefined') {
       title = (document.getElementById('title') as HTMLInputElement)?.value;
       content = (document.getElementById('content') as HTMLInputElement)?.value;
