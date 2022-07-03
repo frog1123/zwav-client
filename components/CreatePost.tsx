@@ -18,12 +18,7 @@ export const CreatePost: FC = () => {
 
   const mutation = gql`
     mutation createPost($author: ID!, $title: String!, $content: String, $createdAt: String!) {
-      createPost(author: $author, title: $title, content: $content, createdAt: $createdAt) {
-        author
-        title
-        content
-        createdAt
-      }
+      createPost(author: $author, title: $title, content: $content, createdAt: $createdAt)
     }
   `;
 
@@ -36,9 +31,8 @@ export const CreatePost: FC = () => {
         (document.getElementById('title') as HTMLInputElement).value = '';
         (document.getElementById('content') as HTMLInputElement).value = '';
       }
-      if (data !== null) {
-        setValue({ reloadPostsList: true });
-      }
+
+      if (data.createPost === 'success') setValue({ reloadPostsList: true });
     }
   };
 

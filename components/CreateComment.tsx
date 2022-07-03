@@ -22,13 +22,10 @@ export const CreateComment: FC<{ postId: string }> = props => {
     if (getCommentContent().length !== 0) {
       _submitComment({ variables: { postId: props.postId, author: 'unknown', content: getCommentContent(), createdAt: new Date().getTime().toString() } });
 
-      if (data !== null) {
-        setValue({ reloadCommentsList: true });
-      }
-
       if (typeof window !== 'undefined') {
         (document.getElementById('content') as HTMLInputElement).value = '';
       }
+      if (data.createComment === 'success') setValue({ reloadCommentsList: true });
     }
   };
 
