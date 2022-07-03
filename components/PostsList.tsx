@@ -22,8 +22,7 @@ export const PostsList: FC = () => {
   const { error, loading, data, refetch } = useQuery(query);
 
   if (value.reloadPostsList) {
-    refetch();
-    setValue({ reloadPostsList: false });
+    refetch().then(() => setValue({ reloadPostsList: false }));
   }
 
   if (loading) return <h1>loading</h1>;

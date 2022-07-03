@@ -23,20 +23,18 @@ export const CreatePost: FC = () => {
   `;
 
   const { setValue } = useContext(UserContext);
+  const [_submitPost, { data }] = useMutation(mutation);
+
   const submitPost = () => {
     if (getPostInput().title.length !== 0) {
-      _submitPost({ variables: { author: 'unknown', title: getPostInput()?.title, content: getPostInput()?.content, createdAt: new Date().getTime().toString() } });
+      _submitPost({ variables: { author: 'unknown', title: getPostInput()?.title, content: getPostInput()?.content, createdAt: new Date().getTime().toString() } }).then(() => setValue({ reloadPostsList: true }));
 
       if (typeof window !== 'undefined') {
         (document.getElementById('title') as HTMLInputElement).value = '';
         (document.getElementById('content') as HTMLInputElement).value = '';
       }
-
-      if (data.createPost === 'success') setValue({ reloadPostsList: true });
     }
   };
-
-  const [_submitPost, { data }] = useMutation(mutation);
 
   const handleKeyPress = (e: any) => {
     if (e.which == '13') e.preventDefault();
