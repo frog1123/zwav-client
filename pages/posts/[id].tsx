@@ -3,23 +3,27 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { gql, useQuery } from '@apollo/client';
 import moment from 'moment';
+import { useContext, useState } from 'react';
 
-import { Navbar } from '../../components/Navbar';
-import { FriendsList } from '../../components/FriendsList';
-import { CreateComment } from '../../components/CreateComment';
-import { useContext } from 'react';
+import { Navbar } from '@components/Navbar';
+import { FriendsList } from '@components/FriendsList';
+import { CreateComment } from '@components/CreateComment';
+import { Comment } from '@components/Comment';
+
 import { UserContext } from '../../UserContext';
 import client from '../../apollo-client';
 
 interface Post {
-  author: string;
-  title: string;
-  content?: string;
-  createdAt: string;
-  comments?: Array<{ author: string; content: string; createdAt: string }>;
+  post: {
+    author: string;
+    title: string;
+    content?: string;
+    createdAt: string;
+    comments?: Array<{ author: string; content: string; createdAt: string }>;
+  };
 }
 
-const Post: NextPage<{ post: Post }> = ({ post }) => {
+const Post: NextPage<Post> = ({ post }) => {
   const query = gql`
     query post($id: ID!) {
       post(id: $id) {
@@ -36,8 +40,28 @@ const Post: NextPage<{ post: Post }> = ({ post }) => {
     }
   `;
 
+  const [postId] = useState(useRouter().query.id.toString());
+
+  const [limit] = useState(10);
+  const [offset, setOffset] = useState(0);
   const { value, setValue } = useContext(UserContext);
-  const { error, loading, data, refetch } = useQuery(query, { variables: { id: useRouter().query.id } });
+  const { error, loading, data, refetch, fetchMore } = useQuery(query, { variables: { id: useRouter().query.id } });
+
+  const fetchMoreComments = () => {
+    fetchMore({
+      variables: {
+        limit: limit,
+        offset: offset + limit
+      },
+      updateQuery: (prev, { fetchMoreResult }: any) => {
+        if (!fetchMoreResult) return prev;
+        if (fetchMoreResult.posts.length !== 0) setOffset(offset + 10);
+        return Object.assign({}, prev, {
+          posts: [...prev.posts, ...fetchMoreResult.posts]
+        });
+      }
+    });
+  };
 
   if (value.reloadCommentsList) {
     refetch();
@@ -66,15 +90,9 @@ const Post: NextPage<{ post: Post }> = ({ post }) => {
           <h2 className='text-white font-medium break-words'>{post.title}</h2>
           <h2 className='text-white break-words'>{data.post.content}</h2>
           <div className='bg-zwav-gray-100 h-[2px] w-[100%] rounded-[1px]'></div>
-          <CreateComment postId={useRouter().query.id.toString()} />
+          <CreateComment postId={postId} />
           {data.post.comments.map((comment: any, index: number) => (
-            <div key={index}>
-              <div className='grid grid-cols-2'>
-                <h2 className='text-white font-medium'>{comment.author}</h2>
-                <h2 className='flex justify-end text-white'>{moment(parseFloat(comment.createdAt)).fromNow()}</h2>
-              </div>
-              <h2 className='text-white'>{comment.content}</h2>
-            </div>
+            <Comment comment={comment} key={index} />
           ))}
         </div>
       </div>
