@@ -3,6 +3,7 @@ import { gql, useMutation } from '@apollo/client';
 
 import TextareaAutosize from 'react-textarea-autosize';
 import { UserContext } from '../UserContext';
+
 export const CreateComment: FC<{ postId: string }> = props => {
   const getCommentContent = (): string => {
     if (typeof window !== 'undefined') {

@@ -2,7 +2,7 @@ import { FC, useContext, useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { UserContext } from '../UserContext';
 
-import { Post } from './Post';
+import { Post } from '@components/Post';
 
 export const PostsList: FC = () => {
   const query = gql`
@@ -17,15 +17,16 @@ export const PostsList: FC = () => {
     }
   `;
 
+  const [limit] = useState(10);
   const [offset, setOffset] = useState(0);
   const { value, setValue } = useContext(UserContext);
-  const { error, loading, data, refetch, fetchMore } = useQuery(query, { variables: { limit: 10, offset: 0 }, fetchPolicy: 'cache-and-network' });
+  const { error, loading, data, refetch, fetchMore } = useQuery(query, { variables: { limit: limit, offset: 0 }, fetchPolicy: 'cache-and-network' });
 
   const fetchMorePosts = () => {
     fetchMore({
       variables: {
-        limit: 10,
-        offset: offset + 10
+        limit: limit,
+        offset: offset + limit
       },
       updateQuery: (prev, { fetchMoreResult }: any) => {
         if (!fetchMoreResult) return prev;
@@ -49,7 +50,11 @@ export const PostsList: FC = () => {
           <Post id={id} author={author} title={title} content={content} createdAt={createdAt} key={index} />
         ))}
       </div>
-      <button onClick={() => fetchMorePosts()}>Fetch more posts</button>
+      <div className='flex justify-center pt-[20px]'>
+        <button onClick={() => fetchMorePosts()} className='p-[4px] rounded-[8px] transition ease-in-out border-none bg-zwav-color hover:bg-zwav-color-hover duration-[0.25s]'>
+          <h1 className='text-white'>Fetch more posts</h1>
+        </button>
+      </div>
     </>
   );
 };

@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import logo from '../public/zwav_logo.svg';
+import logo from '@public/zwav_logo.svg';
 
 export const Navbar: FC = () => {
   return (
