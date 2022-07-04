@@ -9,6 +9,7 @@ import { FriendsList } from '../../components/FriendsList';
 import { CreateComment } from '../../components/CreateComment';
 import { useContext } from 'react';
 import { UserContext } from '../../UserContext';
+import client from '../../apollo-client';
 
 interface Post {
   author: string;
@@ -18,13 +19,12 @@ interface Post {
   comments?: Array<{ author: string; content: string; createdAt: string }>;
 }
 
-const Post: NextPage = () => {
+const Post: NextPage<{ post: Post }> = ({ post }) => {
   const query = gql`
     query post($id: ID!) {
       post(id: $id) {
         id
         author
-        title
         content
         createdAt
         comments {
@@ -50,7 +50,7 @@ const Post: NextPage = () => {
   return (
     <div className='bg-zwav-gray-200 min-h-[100vh]'>
       <Head>
-        <title>{data.post.title} - zwav</title>
+        <title>{post.title} - zwav</title>
         <link rel='icon' href='/zwav_logo.svg' />
       </Head>
       <Navbar />
@@ -63,11 +63,10 @@ const Post: NextPage = () => {
             <h2 className='text-white'>posted by {data.post.author}</h2>
             <h2 className='flex justify-end text-white'>{moment(parseFloat(data.post.createdAt)).fromNow()}</h2>
           </div>
-          <h2 className='text-white font-medium break-words'>{data.post.title}</h2>
+          <h2 className='text-white font-medium break-words'>{post.title}</h2>
           <h2 className='text-white break-words'>{data.post.content}</h2>
           <div className='bg-zwav-gray-100 h-[2px] w-[100%] rounded-[1px]'></div>
           <CreateComment postId={useRouter().query.id.toString()} />
-
           {data.post.comments.map((comment: any, index: number) => (
             <div key={index}>
               <div className='grid grid-cols-2'>
@@ -81,6 +80,19 @@ const Post: NextPage = () => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps = async ({ params }: any) => {
+  const query = gql`
+    query post($id: ID!) {
+      post(id: $id) {
+        title
+      }
+    }
+  `;
+
+  const { data } = await client.query({ query, variables: { id: params.id } });
+  return { props: { post: data.post } };
 };
 
 export default Post;

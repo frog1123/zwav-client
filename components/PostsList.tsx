@@ -1,5 +1,4 @@
-import type { FC } from 'react';
-import { useContext } from 'react';
+import { FC, useContext, useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { UserContext } from '../UserContext';
 
@@ -7,8 +6,8 @@ import { Post } from './Post';
 
 export const PostsList: FC = () => {
   const query = gql`
-    query posts {
-      posts {
+    query ($limit: Int!, $offset: Int!) {
+      posts(limit: $limit, offset: $offset) {
         id
         author
         title
@@ -18,12 +17,27 @@ export const PostsList: FC = () => {
     }
   `;
 
+  const [offset, setOffset] = useState(0);
   const { value, setValue } = useContext(UserContext);
-  const { error, loading, data, refetch } = useQuery(query);
+  const { error, loading, data, refetch, fetchMore } = useQuery(query, { variables: { limit: 10, offset: 0 }, fetchPolicy: 'cache-and-network' });
 
-  if (value.reloadPostsList) {
-    refetch().then(() => setValue({ reloadPostsList: false }));
-  }
+  const fetchMorePosts = () => {
+    fetchMore({
+      variables: {
+        limit: 10,
+        offset: offset + 10
+      },
+      updateQuery: (prev, { fetchMoreResult }: any) => {
+        if (!fetchMoreResult) return prev;
+        if (fetchMoreResult.posts.length !== 0) setOffset(offset + 10);
+        return Object.assign({}, prev, {
+          posts: [...prev.posts, ...fetchMoreResult.posts]
+        });
+      }
+    });
+  };
+
+  if (value.reloadPostsList) refetch().then(() => setValue({ reloadPostsList: false }));
 
   if (loading) return <h1>loading</h1>;
   if (error) return <h1>error</h1>;
@@ -35,6 +49,7 @@ export const PostsList: FC = () => {
           <Post id={id} author={author} title={title} content={content} createdAt={createdAt} key={index} />
         ))}
       </div>
+      <button onClick={() => fetchMorePosts()}>Fetch more posts</button>
     </>
   );
 };
