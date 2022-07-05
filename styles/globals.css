@@ -33,3 +33,15 @@ body::-webkit-scrollbar-thumb {
 input[type='text'] {
   line-height: 28px;
 }
+/* input autocomplete */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #1e2124 inset !important;
+}
+
+input:-webkit-autofill {
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: white !important;
+}

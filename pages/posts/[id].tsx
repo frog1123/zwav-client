@@ -74,7 +74,7 @@ const Post: NextPage<Post> = ({ post }) => {
   return (
     <div className='bg-zwav-gray-200 min-h-[100vh]'>
       <Head>
-        <title>{post.title} - zwav</title>
+        <title>{post.title}</title>
         <link rel='icon' href='/zwav_logo.svg' />
       </Head>
       <Navbar />

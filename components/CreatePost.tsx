@@ -23,7 +23,7 @@ export const CreatePost: FC = () => {
   `;
 
   const { setValue } = useContext(UserContext);
-  const [_submitPost, { data }] = useMutation(mutation);
+  const [_submitPost] = useMutation(mutation);
 
   const submitPost = () => {
     if (getPostInput().title.length !== 0) {

@@ -16,12 +16,15 @@ export const Navbar: FC = () => {
         </a>
       </Link>
       <h1 className='self-center flex justify-center text-white'>add search bar</h1>
-      <div className='grid grid-cols-2 gap-x-[10px] pr-[20px] place-items-center w-[100%]'>
+      <div className='grid grid-cols-3 gap-x-[10px] pr-[20px] place-items-center w-[100%]'>
         <Link href='/'>
           <a className='text-white'>home</a>
         </Link>
         <Link href='/posts'>
           <a className='text-white'>posts</a>
+        </Link>
+        <Link href='/login'>
+          <a className='text-white'>login</a>
         </Link>
       </div>
     </div>
