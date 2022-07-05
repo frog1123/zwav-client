@@ -31,14 +31,27 @@ const Register: NextPage = () => {
   const registerUser = async () => {
     const { username, email, password, passwordConfirmed } = getRegisterInfo();
 
-    if (username.length === 0) return;
-    if (email.length === 0) return;
-    if (password.length < 8) return;
-    if (password !== passwordConfirmed) return;
+    if (username.length === 0) {
+      document.getElementById('error').innerHTML = 'username must be longer than 0 characters';
+      return;
+    }
+    if (email.length === 0) {
+      document.getElementById('error').innerHTML = 'email is required';
+      return;
+    }
+    if (password.length < 8) {
+      document.getElementById('error').innerHTML = 'password must be over 8 characters';
+    }
+    if (password !== passwordConfirmed) {
+      document.getElementById('error').innerHTML = 'passwords do not match';
+      return;
+    }
 
-    // add check if email is used
-
-    _registerUser({ variables: { username, email, password, createdAt: new Date().getTime().toString() } }).then(() => router.push('/login'));
+    _registerUser({ variables: { username, email, password, createdAt: new Date().getTime().toString() } }).then(({ data }) => {
+      if (data.registerUser === 'email_invalid') document.getElementById('error').innerHTML = 'this email is invalid';
+      if (data.registerUser === 'email_already_used') document.getElementById('error').innerHTML = 'this email has been used for another account';
+      if (data.registerUser === 'success') document.getElementById('error').innerHTML = 'account created - redirecting...';
+    });
   };
 
   return (
@@ -68,6 +81,9 @@ const Register: NextPage = () => {
               <h1 className='text-white'>confirm password</h1>
               <input id='password-confirm' placeholder='confirm' className='bg-zwav-gray-400 rounded-[8px] w-[100%] outline-none text-white pl-[4px]'></input>
             </div>
+          </div>
+          <div className='flex justify-center'>
+            <h1 id='error' className='text-white'></h1>
           </div>
           <div className='flex justify-center pb-[6px]'>
             <button onClick={() => registerUser()} className='w-[80px] rounded-[8px] transition ease-in-out border-none bg-zwav-color hover:bg-zwav-color-hover duration-[0.25s]'>
