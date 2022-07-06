@@ -12,7 +12,6 @@ import { Comment } from '@components/Comment';
 
 import { UserContext } from '../../UserContext';
 import client from '../../apollo-client';
-import { off } from 'process';
 
 interface Post {
   post: {
