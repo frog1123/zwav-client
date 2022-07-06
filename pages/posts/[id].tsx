@@ -12,6 +12,7 @@ import { Comment } from '@components/Comment';
 
 import { UserContext } from '../../UserContext';
 import client from '../../apollo-client';
+import { off } from 'process';
 
 interface Post {
   post: {
@@ -25,8 +26,8 @@ interface Post {
 
 const Post: NextPage<Post> = ({ post }) => {
   const query = gql`
-    query post($id: ID!) {
-      post(id: $id) {
+    query ($id: ID!, $commentsLimit: Int!, $commentsOffset: Int!) {
+      post(id: $id, commentsLimit: $commentsLimit, commentsOffset: $commentsOffset) {
         id
         author
         content
@@ -45,28 +46,27 @@ const Post: NextPage<Post> = ({ post }) => {
   const [limit] = useState(10);
   const [offset, setOffset] = useState(0);
   const { value, setValue } = useContext(UserContext);
-  const { error, loading, data, refetch, fetchMore } = useQuery(query, { variables: { id: useRouter().query.id } });
+  const { error, loading, data, refetch, fetchMore } = useQuery(query, { variables: { id: useRouter().query.id, commentsLimit: limit, commentsOffset: 0 }, fetchPolicy: 'cache-and-network' });
+
+  if (value.reloadCommentsList) refetch().then(() => setValue({ reloadCommentsList: false }));
 
   const fetchMoreComments = () => {
     fetchMore({
       variables: {
-        limit: limit,
-        offset: offset + limit
+        commentsLimit: limit,
+        commentsOffset: offset + limit
       },
       updateQuery: (prev, { fetchMoreResult }: any) => {
         if (!fetchMoreResult) return prev;
-        if (fetchMoreResult.posts.length !== 0) setOffset(offset + 10);
+        if (fetchMoreResult.post.comments.length !== 0) setOffset(offset + 10);
         return Object.assign({}, prev, {
-          posts: [...prev.posts, ...fetchMoreResult.posts]
+          post: Object.assign({}, prev.post, {
+            comments: [...prev.post.comments, ...fetchMoreResult.post.comments]
+          })
         });
       }
     });
   };
-
-  if (value.reloadCommentsList) {
-    refetch();
-    setValue({ reloadCommentsList: false });
-  }
 
   if (loading) return <h1>loading</h1>;
   if (error) return <h1>error</h1>;
@@ -76,24 +76,35 @@ const Post: NextPage<Post> = ({ post }) => {
       <Head>
         <title>{post.title}</title>
         <link rel='icon' href='/zwav_logo.svg' />
+        <meta name='title' content={post.title} />
+        <meta name='description' content={post.content !== '' ? post.content : 'no description'} />
+        <meta name='og:title' content={post.title} />
+        <meta name='og:description' content={post.content !== '' ? post.content : 'no description'} />
       </Head>
       <Navbar />
       <div className='grid grid-cols-[12%_80%] pt-[80px] pb-[50px]'>
         <div className='mr-[6px] ml-[6px]'>
           <FriendsList />
         </div>
-        <div className='bg-zwav-gray-300 rounded-[8px] p-[4px]'>
-          <div className='grid grid-cols-2'>
-            <h2 className='text-white'>posted by {data.post.author}</h2>
-            <h2 className='flex justify-end text-white'>{moment(parseFloat(data.post.createdAt)).fromNow()}</h2>
+        <div>
+          <div className='bg-zwav-gray-300 rounded-[8px] p-[4px]'>
+            <div className='grid grid-cols-2'>
+              <h2 className='text-white'>posted by {data.post.author}</h2>
+              <h2 className='flex justify-end text-white'>{moment(parseFloat(data.post.createdAt)).fromNow()}</h2>
+            </div>
+            <h2 className='text-white font-medium break-words'>{post.title}</h2>
+            <h2 className='text-white break-words'>{data.post.content}</h2>
+            <div className='bg-zwav-gray-100 h-[2px] w-[100%] rounded-[1px]'></div>
+            <CreateComment postId={postId} />
+            {data.post.comments.map((comment: any, index: number) => (
+              <Comment comment={comment} key={index} />
+            ))}
           </div>
-          <h2 className='text-white font-medium break-words'>{post.title}</h2>
-          <h2 className='text-white break-words'>{data.post.content}</h2>
-          <div className='bg-zwav-gray-100 h-[2px] w-[100%] rounded-[1px]'></div>
-          <CreateComment postId={postId} />
-          {data.post.comments.map((comment: any, index: number) => (
-            <Comment comment={comment} key={index} />
-          ))}
+          <div className='flex justify-center mt-[10px]'>
+            <button onClick={() => fetchMoreComments()} className='p-[4px] rounded-[8px] transition ease-in-out border-none bg-zwav-color hover:bg-zwav-color-hover duration-[0.25s]'>
+              <h1 className='text-white'>Fetch more comments</h1>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -102,9 +113,10 @@ const Post: NextPage<Post> = ({ post }) => {
 
 export const getServerSideProps = async ({ params }: any) => {
   const query = gql`
-    query post($id: ID!) {
-      post(id: $id) {
+    query ($id: ID!) {
+      post(id: $id, commentsLimit: 0, commentsOffset: 0) {
         title
+        content
       }
     }
   `;
