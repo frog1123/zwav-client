@@ -74,7 +74,6 @@ const Post: NextPage<Post> = ({ post }) => {
     <div className='bg-zwav-gray-200 min-h-[100vh]'>
       <Head>
         <title>{post.title}</title>
-        <link rel='icon' href='/zwav_logo.svg' />
         <meta name='title' content={post.title} />
         <meta name='description' content={post.content !== '' ? post.content : 'no description'} />
         <meta name='og:title' content={post.title} />
@@ -95,9 +94,12 @@ const Post: NextPage<Post> = ({ post }) => {
             <h2 className='text-white break-words'>{data.post.content}</h2>
             <div className='bg-zwav-gray-100 h-[2px] w-[100%] rounded-[1px]'></div>
             <CreateComment postId={postId} />
-            {data.post.comments.map((comment: any, index: number) => (
-              <Comment comment={comment} key={index} />
-            ))}
+            <div className='bg-zwav-gray-100 h-[2px] w-[100%] mt-[4px] rounded-[1px]'></div>
+            <div className='pl-[4px] pr-[4px]'>
+              {data.post.comments.map((comment: any, index: number) => (
+                <Comment comment={comment} key={index} />
+              ))}
+            </div>
           </div>
           <div className='flex justify-center mt-[10px]'>
             <button onClick={() => fetchMoreComments()} className='p-[4px] rounded-[8px] transition ease-in-out border-none bg-zwav-color hover:bg-zwav-color-hover duration-[0.25s]'>

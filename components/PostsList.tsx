@@ -3,7 +3,6 @@ import { gql, useQuery } from '@apollo/client';
 import { UserContext } from '../UserContext';
 
 import { Post } from '@components/Post';
-import { off } from 'process';
 
 export const PostsList: FC = () => {
   const query = gql`
@@ -41,8 +40,18 @@ export const PostsList: FC = () => {
 
   if (value.reloadPostsList) refetch().then(() => setValue({ reloadPostsList: false }));
 
-  if (loading) return <h1>loading</h1>;
-  if (error) return <h1>error</h1>;
+  if (loading)
+    return (
+      <div className='bg-zwav-gray-300 p-[6px] flex justify-center rounded-[8px]'>
+        <h1 className='text-white'>loading...</h1>
+      </div>
+    );
+  if (error)
+    return (
+      <div className='bg-zwav-gray-300 p-[6px] flex justify-center rounded-[8px]'>
+        <h1 className='text-white'>something went wrong :/</h1>
+      </div>
+    );
 
   return (
     <>

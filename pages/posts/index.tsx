@@ -11,7 +11,6 @@ const Posts: NextPage = () => {
     <div className='bg-zwav-gray-200 min-h-[100vh]'>
       <Head>
         <title>zwav</title>
-        <link rel='icon' href='/zwav_logo.svg' />
       </Head>
       <Navbar />
       <div className='grid grid-cols-[12%_80%] pt-[80px]'>

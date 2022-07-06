@@ -61,7 +61,6 @@ const Register: NextPage = () => {
     <div className='bg-zwav-gray-200 min-h-[100vh]'>
       <Head>
         <title>register</title>
-        <link rel='icon' href='/zwav_logo.svg' />
       </Head>
       <div className='flex justify-center items-center h-[100vh]'>
         <div className='bg-zwav-gray-300 p-[12px] pb-0 rounded-[8px] mb-[100px]'>
