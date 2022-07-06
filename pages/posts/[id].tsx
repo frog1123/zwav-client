@@ -67,7 +67,6 @@ const Post: NextPage<Post> = ({ post }) => {
     });
   };
 
-  if (loading) return <h1>loading</h1>;
   if (error) return <h1>error</h1>;
 
   return (
@@ -86,20 +85,28 @@ const Post: NextPage<Post> = ({ post }) => {
         </div>
         <div>
           <div className='bg-zwav-gray-300 rounded-[8px] p-[4px]'>
-            <div className='grid grid-cols-2'>
-              <h2 className='text-white'>posted by {data.post.author}</h2>
-              <h2 className='flex justify-end text-white'>{moment(parseFloat(data.post.createdAt)).fromNow()}</h2>
-            </div>
-            <h2 className='text-white font-medium break-words'>{post.title}</h2>
-            <h2 className='text-white break-words'>{data.post.content}</h2>
-            <div className='bg-zwav-gray-100 h-[2px] w-[100%] rounded-[1px]'></div>
-            <CreateComment postId={postId} />
-            <div className='bg-zwav-gray-100 h-[2px] w-[100%] mt-[4px] rounded-[1px]'></div>
-            <div className='pl-[4px] pr-[4px]'>
-              {data.post.comments.map((comment: any, index: number) => (
-                <Comment comment={comment} key={index} />
-              ))}
-            </div>
+            {loading ? (
+              <h1 className='text-white'>loading...</h1>
+            ) : error ? (
+              <h1 className='text-white'>something went wrong :/</h1>
+            ) : (
+              <div>
+                <div className='grid grid-cols-2'>
+                  <h2 className='text-white'>posted by {data.post.author}</h2>
+                  <h2 className='flex justify-end text-white'>{moment(parseFloat(data.post.createdAt)).fromNow()}</h2>
+                </div>
+                <h2 className='text-white font-medium break-words'>{post.title}</h2>
+                <h2 className='text-white break-words'>{data.post.content}</h2>
+                <div className='bg-zwav-gray-100 h-[2px] w-[100%] rounded-[1px]'></div>
+                <CreateComment postId={postId} />
+                {data.post.comments.length > 0 ? <div className='bg-zwav-gray-100 h-[2px] w-[100%] mt-[4px] rounded-[1px]'></div> : ''}
+                <div className='pl-[4px] pr-[4px]'>
+                  {data.post.comments.map((comment: any, index: number) => (
+                    <Comment comment={comment} key={index} />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           <div className='flex justify-center mt-[10px]'>
             <button onClick={() => fetchMoreComments()} className='p-[4px] rounded-[8px] transition ease-in-out border-none bg-zwav-color hover:bg-zwav-color-hover duration-[0.25s]'>
