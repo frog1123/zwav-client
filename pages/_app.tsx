@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 import { UserContext } from '../UserContext';
 
-function MyApp({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
   const [value, setValue] = useState({
     reloadPostsList: false,
     reloadCommentsList: false
@@ -19,6 +19,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       </UserContext.Provider>
     </ApolloProvider>
   );
-}
+};
 
-export default MyApp;
+export default App;

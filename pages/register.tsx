@@ -40,7 +40,7 @@ const Register: NextPage = () => {
       return;
     }
     if (password.length < 8) {
-      document.getElementById('error').innerHTML = 'password must be over 8 characters';
+      document.getElementById('error').innerHTML = 'password must be at least 8 characters';
     }
     if (password !== passwordConfirmed) {
       document.getElementById('error').innerHTML = 'passwords do not match';
@@ -49,8 +49,11 @@ const Register: NextPage = () => {
 
     _registerUser({ variables: { username, email, password, createdAt: new Date().getTime().toString() } }).then(({ data }) => {
       if (data.registerUser === 'email_invalid') document.getElementById('error').innerHTML = 'this email is invalid';
-      if (data.registerUser === 'email_already_used') document.getElementById('error').innerHTML = 'this email has been used for another account';
-      if (data.registerUser === 'success') document.getElementById('error').innerHTML = 'account created - redirecting...';
+      if (data.registerUser === 'email_already_used') document.getElementById('error').innerHTML = 'this email has already been registered';
+      if (data.registerUser === 'success') {
+        document.getElementById('error').innerHTML = 'account created - redirecting...';
+        router.push('/login');
+      }
     });
   };
 
