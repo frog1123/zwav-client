@@ -14,16 +14,18 @@ import { UserContext } from '../../UserContext';
 import client from '../../apollo-client';
 
 interface Post {
-  post: {
-    author: string;
-    title: string;
-    content?: string;
-    createdAt: string;
-    comments?: Array<{ author: string; content: string; createdAt: string }>;
-  };
+  author: string;
+  title: string;
+  content?: string;
+  createdAt: string;
+  comments?: Array<{ author: string; content: string; createdAt: string }>;
 }
 
-const Post: NextPage<Post> = ({ post }) => {
+interface Author {
+  username: string;
+}
+
+const Post: NextPage<{ post: Post; author: Author }> = ({ post, author }) => {
   const query = gql`
     query ($id: ID!, $commentsLimit: Int!, $commentsOffset: Int!) {
       post(id: $id, commentsLimit: $commentsLimit, commentsOffset: $commentsOffset) {
@@ -40,21 +42,12 @@ const Post: NextPage<Post> = ({ post }) => {
     }
   `;
 
-  const authorQuery = gql`
-    query ($id: ID!) {
-      user(id: $id) {
-        username
-      }
-    }
-  `;
-
   const [postId] = useState(useRouter().query.id.toString());
 
   const [limit] = useState(10);
   const [offset, setOffset] = useState(0);
   const { value, setValue } = useContext(UserContext);
   const { error, loading, data, refetch, fetchMore } = useQuery(query, { variables: { id: useRouter().query.id, commentsLimit: limit, commentsOffset: 0 }, fetchPolicy: 'cache-and-network' });
-  const author = useQuery(authorQuery, { variables: { id: data.post.author } });
 
   if (value.reloadCommentsList) refetch().then(() => setValue({ reloadCommentsList: false }));
 
@@ -83,9 +76,9 @@ const Post: NextPage<Post> = ({ post }) => {
       <Head>
         <title>{post.title}</title>
         <meta name='title' content={post.title} />
-        <meta name='description' content={post.content !== '' ? post.content : 'no description'} />
+        <meta name='description' content={post.content !== '' ? `posted by ${author.username}: ${post.content}` : `posted by ${author.username}: no description`} />
         <meta name='og:title' content={post.title} />
-        <meta name='og:description' content={post.content !== '' ? post.content : 'no description'} />
+        <meta name='og:description' content={post.content !== '' ? `posted by ${author.username}: ${post.content}` : `posted by ${author.username}: no description`} />
       </Head>
       <Navbar />
       <div className='grid grid-cols-[12%_80%] pt-[80px] pb-[50px]'>
@@ -101,7 +94,7 @@ const Post: NextPage<Post> = ({ post }) => {
             ) : (
               <div>
                 <div className='grid grid-cols-2'>
-                  <h2 className='text-white'>posted by {author.data.user.username}</h2>
+                  <h2 className='text-white'>posted by {author.username}</h2>
                   <h2 className='flex justify-end text-white'>{moment(parseFloat(data.post.createdAt)).fromNow()}</h2>
                 </div>
                 <h2 className='text-white font-medium break-words'>{post.title}</h2>
@@ -129,17 +122,30 @@ const Post: NextPage<Post> = ({ post }) => {
 };
 
 export const getServerSideProps = async ({ params }: any) => {
-  const query = gql`
+  const queryPost = gql`
     query ($id: ID!) {
       post(id: $id, commentsLimit: 0, commentsOffset: 0) {
         title
         content
+        author
       }
     }
   `;
 
-  const { data } = await client.query({ query, variables: { id: params.id } });
-  return { props: { post: data.post } };
+  const queryAuthor = gql`
+    query ($id: ID!) {
+      user(id: $id) {
+        username
+      }
+    }
+  `;
+
+  const { data } = await client.query({ query: queryPost, variables: { id: params.id } });
+  const author = await client.query({ query: queryAuthor, variables: { id: data.post.author } });
+
+  console.log(data);
+
+  return { props: { post: data.post, author: author.data.user } };
 };
 
 export default Post;
