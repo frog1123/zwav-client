@@ -1,6 +1,7 @@
 import { FC, useContext } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { UserContext } from '../UserContext';
+import Cookie from 'js-cookie';
 
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -27,7 +28,7 @@ export const CreatePost: FC = () => {
 
   const submitPost = () => {
     if (getPostInput().title.length !== 0) {
-      _submitPost({ variables: { author: 'unknown', title: getPostInput()?.title, content: getPostInput()?.content, createdAt: new Date().getTime().toString() } }).then(() => setValue({ reloadPostsList: true }));
+      _submitPost({ variables: { author: Cookie.get('currentUserId'), title: getPostInput()?.title, content: getPostInput()?.content, createdAt: new Date().getTime().toString() } }).then(() => setValue({ reloadPostsList: true }));
 
       if (typeof window !== 'undefined') {
         (document.getElementById('title') as HTMLInputElement).value = '';

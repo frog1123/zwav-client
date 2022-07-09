@@ -2,12 +2,23 @@ import type { FC } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import moment from 'moment';
+import { useQuery, gql } from '@apollo/client';
 
 export const Post: FC<{ id: string; author: string; title: string; content?: string; createdAt: string }> = props => {
+  const query = gql`
+    query ($id: ID!) {
+      user(id: $id) {
+        username
+      }
+    }
+  `;
+
+  const { data } = useQuery(query, { variables: { id: props.author } });
+
   return (
     <div className='bg-zwav-gray-300 rounded-[8px] p-[10px] break-words'>
       <div className='grid grid-cols-2'>
-        <h2 className='text-white text-sm'>{props.author}</h2>
+        <h2 className='text-white text-sm'>{typeof data?.user?.username !== 'undefined' ? data.user.username : 'unknown'}</h2>
         <h2 className='flex justify-end text-white text-sm'>{moment(parseFloat(props.createdAt)).fromNow()}</h2>
       </div>
       <Link href={`${useRouter().basePath}/posts/${props.id}`}>
