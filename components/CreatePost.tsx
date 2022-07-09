@@ -4,6 +4,7 @@ import { UserContext } from '../UserContext';
 import Cookie from 'js-cookie';
 
 import TextareaAutosize from 'react-textarea-autosize';
+import Link from 'next/link';
 
 export const CreatePost: FC = () => {
   let title: string | undefined, content: string | undefined;
@@ -42,15 +43,34 @@ export const CreatePost: FC = () => {
     if (e.key === 'Enter') submitPost();
   };
 
-  return (
-    <>
-      <div className='grid grid-rows-[max-content_max-content] bg-zwav-gray-300 p-[8px] rounded-[8px] gap-y-[6px]'>
-        <TextareaAutosize id='title' onKeyPress={e => handleKeyPress(e)} placeholder='title (required)' className='bg-zwav-gray-400 rounded-[6px] pl-[4px] pr-[2px] outline-none overflow-x-hidden text-white no-scrollbar resize-none' />
-        <TextareaAutosize id='content' minRows={3} placeholder='content' className='bg-zwav-gray-400 rounded-[6px] pl-[4px] pr-[2px] outline-none text-white no-scrollbar resize-none' />
-        <button onClick={() => submitPost()} className='w-[80px] rounded-[8px] transition ease-in-out border-none bg-zwav-color hover:bg-zwav-color-hover duration-[0.25s]'>
-          <h2 className='text-white'>post</h2>
-        </button>
-      </div>
-    </>
-  );
+  if (typeof Cookie.get('currentUserId') === 'undefined')
+    return (
+      <>
+        <div className='flex justify-center bg-zwav-gray-300 p-[8px] rounded-[8px] gap-y-[6px]'>
+          <h1 className='text-white'>
+            <Link href='/login'>
+              <a className='text-zwav-color hover:text-zwav-color-hover'>login</a>
+            </Link>{' '}
+            or{' '}
+            <Link href='/register'>
+              <a className='text-zwav-color hover:text-zwav-color-hover'>reigster</a>
+            </Link>{' '}
+            to create posts
+          </h1>
+        </div>
+      </>
+    );
+
+  if (Cookie.get('currentUserId'))
+    return (
+      <>
+        <div className='grid grid-rows-[max-content_max-content] bg-zwav-gray-300 p-[8px] rounded-[8px] gap-y-[6px]'>
+          <TextareaAutosize id='title' onKeyPress={e => handleKeyPress(e)} placeholder='title (required)' className='bg-zwav-gray-400 rounded-[6px] pl-[4px] pr-[2px] outline-none overflow-x-hidden text-white no-scrollbar resize-none' />
+          <TextareaAutosize id='content' minRows={3} placeholder='content' className='bg-zwav-gray-400 rounded-[6px] pl-[4px] pr-[2px] outline-none text-white no-scrollbar resize-none' />
+          <button onClick={() => submitPost()} className='w-[80px] rounded-[8px] transition ease-in-out border-none bg-zwav-color hover:bg-zwav-color-hover duration-[0.25s]'>
+            <h2 className='text-white'>post</h2>
+          </button>
+        </div>
+      </>
+    );
 };

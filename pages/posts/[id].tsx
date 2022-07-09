@@ -40,12 +40,21 @@ const Post: NextPage<Post> = ({ post }) => {
     }
   `;
 
+  const authorQuery = gql`
+    query ($id: ID!) {
+      user(id: $id) {
+        username
+      }
+    }
+  `;
+
   const [postId] = useState(useRouter().query.id.toString());
 
   const [limit] = useState(10);
   const [offset, setOffset] = useState(0);
   const { value, setValue } = useContext(UserContext);
   const { error, loading, data, refetch, fetchMore } = useQuery(query, { variables: { id: useRouter().query.id, commentsLimit: limit, commentsOffset: 0 }, fetchPolicy: 'cache-and-network' });
+  const author = useQuery(authorQuery, { variables: { id: data.post.author } });
 
   if (value.reloadCommentsList) refetch().then(() => setValue({ reloadCommentsList: false }));
 
@@ -92,7 +101,7 @@ const Post: NextPage<Post> = ({ post }) => {
             ) : (
               <div>
                 <div className='grid grid-cols-2'>
-                  <h2 className='text-white'>posted by {data.post.author}</h2>
+                  <h2 className='text-white'>posted by {author.data.user.username}</h2>
                   <h2 className='flex justify-end text-white'>{moment(parseFloat(data.post.createdAt)).fromNow()}</h2>
                 </div>
                 <h2 className='text-white font-medium break-words'>{post.title}</h2>
