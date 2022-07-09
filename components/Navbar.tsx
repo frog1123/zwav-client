@@ -1,10 +1,25 @@
 import type { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Cookie from 'js-cookie';
+import { useQuery, gql } from '@apollo/client';
 
 import logo from '@public/zwav_logo.svg';
 
 export const Navbar: FC = () => {
+  const query = gql`
+    query ($id: ID!) {
+      user(id: $id) {
+        username
+        id
+        email
+        createdAt
+      }
+    }
+  `;
+
+  const { data } = useQuery(query, { variables: { id: Cookie.get('currentUserId') } });
+
   return (
     <div className='fixed bg-zwav-gray-400 grid grid-cols-[max-content_auto_max-content] h-[50px] w-[100%]'>
       <Link href='/posts'>
@@ -23,10 +38,10 @@ export const Navbar: FC = () => {
         <Link href='/posts'>
           <a className='text-white'>posts</a>
         </Link>
-        <Link href='/login'>
-          <a className='text-white'>login</a>
-        </Link>
+        <h1 className='text-white'>{data ? data.user.username : 'error'}</h1>
       </div>
     </div>
   );
 };
+
+// Cookie.get('currentUserId')

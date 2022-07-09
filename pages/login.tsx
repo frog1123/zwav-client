@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
 import { gql, useLazyQuery } from '@apollo/client';
+import Cookie from 'js-cookie';
 
 const Login: NextPage = () => {
   const getLoginInfo = (): { email: string; password: string } => {
@@ -49,6 +50,7 @@ const Login: NextPage = () => {
         }
         if (response === 'success') {
           document.getElementById('error').innerHTML = 'redirecting...';
+          Cookie.set('currentUserId', data.login.id);
           router.push('/posts');
         }
       });
