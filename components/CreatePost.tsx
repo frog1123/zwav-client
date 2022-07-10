@@ -1,8 +1,7 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { UserContext } from '../UserContext';
 import Cookie from 'js-cookie';
-
 import TextareaAutosize from 'react-textarea-autosize';
 import Link from 'next/link';
 

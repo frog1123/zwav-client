@@ -5,8 +5,13 @@ import { Navbar } from '@components/Navbar';
 import { CreatePost } from '@components/CreatePost';
 import { PostsList } from '@components/PostsList';
 import { FriendsList } from '@components/FriendsList';
+import { useEffect, useState } from 'react';
 
 const Posts: NextPage = () => {
+  const [loadCreatePost, setLoadCreatePost] = useState(false);
+
+  useEffect(() => setLoadCreatePost(true));
+
   return (
     <div className='bg-zwav-gray-200 min-h-[100vh]'>
       <Head>
@@ -18,7 +23,7 @@ const Posts: NextPage = () => {
           <FriendsList />
         </div>
         <div className='grid grid-rows-[max-content_max_content]'>
-          <CreatePost />
+          {loadCreatePost ? <CreatePost /> : ''}
           <div className='mt-[15px] pb-[50px] w-[100%] m-auto'>
             <PostsList />
           </div>
