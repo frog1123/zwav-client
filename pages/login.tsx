@@ -58,7 +58,7 @@ const Login: NextPage = () => {
   };
 
   return (
-    <div className='bg-zwav-gray-200 min-h-[100vh]'>
+    <>
       <Head>
         <title>login</title>
       </Head>
@@ -90,7 +90,7 @@ const Login: NextPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

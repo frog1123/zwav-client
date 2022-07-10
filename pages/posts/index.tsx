@@ -13,7 +13,7 @@ const Posts: NextPage = () => {
   useEffect(() => setLoadCreatePost(true));
 
   return (
-    <div className='bg-zwav-gray-200 min-h-[100vh]'>
+    <>
       <Head>
         <title>zwav</title>
       </Head>
@@ -29,7 +29,7 @@ const Posts: NextPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

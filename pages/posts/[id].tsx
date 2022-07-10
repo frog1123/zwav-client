@@ -72,7 +72,7 @@ const Post: NextPage<{ post: Post; author: Author }> = ({ post, author }) => {
   if (error) return <h1>error</h1>;
 
   return (
-    <div className='bg-zwav-gray-200 min-h-[100vh]'>
+    <div className='min-h-[100vh]'>
       <Head>
         <title>{post.title}</title>
         <meta name='title' content={post.title} />
@@ -142,8 +142,6 @@ export const getServerSideProps = async ({ params }: any) => {
 
   const { data } = await client.query({ query: queryPost, variables: { id: params.id } });
   const author = await client.query({ query: queryAuthor, variables: { id: data.post.author } });
-
-  console.log(data);
 
   return { props: { post: data.post, author: author.data.user } };
 };

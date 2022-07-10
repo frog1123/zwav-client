@@ -58,7 +58,7 @@ const Register: NextPage = () => {
   };
 
   return (
-    <div className='bg-zwav-gray-200 min-h-[100vh]'>
+    <>
       <Head>
         <title>register</title>
       </Head>
@@ -98,7 +98,7 @@ const Register: NextPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -6,8 +6,8 @@ import { Post } from '@components/Post';
 
 export const PostsList: FC = () => {
   const query = gql`
-    query ($limit: Int!, $offset: Int!) {
-      posts(limit: $limit, offset: $offset) {
+    query ($user: ID!, $limit: Int!, $offset: Int!) {
+      posts(user: $user, limit: $limit, offset: $offset) {
         id
         author
         title
@@ -20,7 +20,7 @@ export const PostsList: FC = () => {
   const [limit] = useState(10);
   const [offset, setOffset] = useState(0);
   const { value, setValue } = useContext(UserContext);
-  const { error, loading, data, refetch, fetchMore } = useQuery(query, { variables: { limit: limit, offset: 0 }, fetchPolicy: 'cache-and-network' });
+  const { error, loading, data, refetch, fetchMore } = useQuery(query, { variables: { user: 'any', limit: limit, offset: 0 }, fetchPolicy: 'cache-and-network' });
 
   const fetchMorePosts = () => {
     fetchMore({

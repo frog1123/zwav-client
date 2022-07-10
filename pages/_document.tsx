@@ -20,7 +20,7 @@ const Document = () => {
         <meta name='msapplication-TileImage' content='/icons/ms-icon-144x144.png' />
         <link rel='manifest' href='/manifest.json' />
       </Head>
-      <body className='bg-zwav-gray-200'>
+      <body className='bg-zwav-gray-200 min-h[100vh]'>
         <Main />
         <NextScript />
       </body>
