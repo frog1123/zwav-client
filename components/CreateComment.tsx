@@ -20,11 +20,11 @@ export const CreateComment: FC<{ postId: string }> = props => {
   `;
 
   const { setValue } = useContext(UserContext);
-  const [_submitComment, { data }] = useMutation(mutation);
+  const [_submitComment] = useMutation(mutation);
 
   const submitComment = () => {
     if (getCommentContent().length !== 0) {
-      _submitComment({ variables: { postId: props.postId, author: 'unknown', content: getCommentContent(), createdAt: new Date().getTime().toString() } }).then(() => setValue({ reloadCommentsList: true }));
+      _submitComment({ variables: { postId: props.postId, author: Cookie.get('currentUserId'), content: getCommentContent(), createdAt: new Date().getTime().toString() } }).then(() => setValue({ reloadCommentsList: true }));
 
       if (typeof window !== 'undefined') {
         (document.getElementById('content') as HTMLInputElement).value = '';

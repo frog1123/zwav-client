@@ -35,6 +35,10 @@ const Register: NextPage = () => {
       document.getElementById('error').innerHTML = 'username must be longer than 0 characters';
       return;
     }
+    if (username.length > 29) {
+      document.getElementById('error').innerHTML = 'username must be less than 30 characters';
+      return;
+    }
     if (email.length === 0) {
       document.getElementById('error').innerHTML = 'email is required';
       return;
@@ -69,7 +73,7 @@ const Register: NextPage = () => {
           <div className='grid w-[300px] mb-[6px]'>
             <div>
               <h1 className='text-white'>create a username</h1>
-              <input id='username' placeholder='e.g frogdude1123' className='bg-zwav-gray-400 rounded-[8px] w-[100%] outline-none text-white pl-[4px]'></input>
+              <input id='username' placeholder='must be under 30 characters' className='bg-zwav-gray-400 rounded-[8px] w-[100%] outline-none text-white pl-[4px]'></input>
             </div>
             <div>
               <h1 className='text-white'>email</h1>

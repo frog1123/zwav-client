@@ -72,7 +72,7 @@ const Post: NextPage<{ post: Post; author: Author }> = ({ post, author }) => {
   if (error) return <h1>error</h1>;
 
   return (
-    <div className='min-h-[100vh]'>
+    <>
       <Head>
         <title>{post.title}</title>
         <meta name='title' content={post.title} />
@@ -95,7 +95,7 @@ const Post: NextPage<{ post: Post; author: Author }> = ({ post, author }) => {
               <div>
                 <div className='grid grid-cols-2'>
                   <h2 className='text-white'>posted by {author.username}</h2>
-                  <h2 className='flex justify-end text-white'>{moment(parseFloat(data.post.createdAt)).fromNow()}</h2>
+                  <h2 className='flex justify-end text-gray-400 text-sm'>{moment(parseFloat(data.post.createdAt)).fromNow()}</h2>
                 </div>
                 <h2 className='text-white font-medium break-words'>{post.title}</h2>
                 <h2 className='text-white break-words'>{data.post.content}</h2>
@@ -117,7 +117,7 @@ const Post: NextPage<{ post: Post; author: Author }> = ({ post, author }) => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

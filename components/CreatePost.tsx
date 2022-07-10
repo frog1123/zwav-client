@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from 'react';
+import { FC, useContext } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { UserContext } from '../UserContext';
 import Cookie from 'js-cookie';
