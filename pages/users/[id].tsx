@@ -40,6 +40,13 @@ const User: NextPage = ({ user, posts, comments }: any) => {
 
   return (
     <>
+      <Head>
+        <title>{user.username}</title>
+        <meta name='title' content={user.username} />
+        <meta name='description' content={`joined ${moment(parseFloat(user.createdAt)).fromNow()}`} />
+        <meta name='og:title' content={user.username} />
+        <meta name='og:description' content={`joined ${moment(parseFloat(user.createdAt)).fromNow()}`} />
+      </Head>
       <Navbar />
       <div className='pt-[80px] pb-[50px]'>
         <div className='flex justify-center bg-zwav-gray-300 w-[95%] ml-[auto] mr-[auto] rounded-[8px]'>
@@ -65,8 +72,8 @@ const User: NextPage = ({ user, posts, comments }: any) => {
             ))}
           </div>
           <div id='comments' className='hidden'>
-            {comments.map(({ content, createdAt }: { content: string; createdAt: string }) => (
-              <UserComment content={content} createdAt={createdAt} />
+            {comments.map(({ content, replyingTo, createdAt }: { content: string; replyingTo: string; createdAt: string }) => (
+              <UserComment content={content} createdAt={createdAt} replyingTo={replyingTo} />
             ))}
           </div>
         </div>
@@ -101,6 +108,7 @@ export const getServerSideProps = async ({ params }: any) => {
     query ($user: ID!, $limit: Int!, $offset: Int!) {
       comments(user: $user, limit: $limit, offset: $offset) {
         content
+        replyingTo
         createdAt
       }
     }
