@@ -33,7 +33,7 @@ export const CreateComment: FC<{ postId: string }> = props => {
   };
 
   const handleKeyPress = (e: any) => {
-    if (e.which == '13') e.preventDefault();
+    if (e.key === 'Enter' && e.shiftKey === true) return;
     if (e.key === 'Enter') submitComment();
   };
 

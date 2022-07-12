@@ -48,7 +48,9 @@ export const Navbar: FC = () => {
         </Link>
         {data ? (
           <div className='grid grid-cols-[max-content_max-content] gap-x-[8px]'>
-            <h1 className='text-white'>{data ? data.user.username : ''}</h1>
+            <Link href={`${useRouter().basePath}/users/${data.user.id}`}>
+              <a className='text-white'>{data ? data.user.username : ''}</a>
+            </Link>
             <h1 className='text-white cursor-pointer' onClick={() => logout()}>
               logout
             </h1>

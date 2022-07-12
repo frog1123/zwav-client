@@ -1,33 +1,29 @@
 import type { FC } from 'react';
 import moment from 'moment';
-import { useQuery, gql } from '@apollo/client';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 interface Comment {
   comment: {
-    author: string;
+    author: {
+      id: string;
+      username: string;
+    };
     content: string;
     createdAt: string;
   };
 }
 
 export const Comment: FC<Comment> = props => {
-  const query = gql`
-    query ($id: ID!) {
-      user(id: $id) {
-        username
-      }
-    }
-  `;
-
-  const { data } = useQuery(query, { variables: { id: props.comment.author } });
-
   return (
     <>
       <div className='grid grid-cols-2'>
-        <h2 className='text-white font-medium'>{data ? data.user.username : props.comment.author}</h2>
+        <Link href={`${useRouter().basePath}/users/${props.comment.author.id}`}>
+          <a className='text-gray-400 text-sm hover:text-white w-[max-content]'>{props.comment.author.username}</a>
+        </Link>
         <h2 className='flex justify-end text-gray-400 text-sm'>{moment(parseFloat(props.comment.createdAt)).fromNow()}</h2>
       </div>
-      <h2 className='text-white'>{props.comment.content}</h2>
+      <h2 className='text-white whitespace-pre-line'>{props.comment.content}</h2>
     </>
   );
 };

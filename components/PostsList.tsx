@@ -9,7 +9,10 @@ export const PostsList: FC = () => {
     query ($user: ID!, $limit: Int!, $offset: Int!) {
       posts(user: $user, limit: $limit, offset: $offset) {
         id
-        author
+        author {
+          id
+          username
+        }
         title
         content
         createdAt

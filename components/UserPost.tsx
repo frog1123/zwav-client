@@ -12,7 +12,7 @@ export const UserPost: FC<{ id: string; title: string; content: string; createdA
         </Link>
         <h2 className='w-[max-content] flex ml-[auto] text-gray-400 text-sm'>{moment(parseFloat(props.createdAt)).fromNow()}</h2>
       </div>
-      <h1 className='text-white'>{props.content}</h1>
+      <h1 className='text-white whitespace-pre-line'>{props.content}</h1>
     </div>
   );
 };

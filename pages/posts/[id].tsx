@@ -12,9 +12,13 @@ import { Comment } from '@components/Comment';
 
 import { UserContext } from '../../UserContext';
 import client from '../../apollo-client';
+import Link from 'next/link';
 
 interface Post {
-  author: string;
+  author: {
+    id: string;
+    username: string;
+  };
   title: string;
   content?: string;
   createdAt: string;
@@ -29,12 +33,17 @@ const Post: NextPage<{ post: Post; author: Author }> = ({ post, author }) => {
   const query = gql`
     query ($id: ID!, $commentsLimit: Int!, $commentsOffset: Int!) {
       post(id: $id, commentsLimit: $commentsLimit, commentsOffset: $commentsOffset) {
-        id
-        author
+        author {
+          id
+          username
+        }
         content
         createdAt
         comments {
-          author
+          author {
+            id
+            username
+          }
           content
           createdAt
         }
@@ -69,16 +78,16 @@ const Post: NextPage<{ post: Post; author: Author }> = ({ post, author }) => {
     });
   };
 
-  if (error) return <h1>error</h1>;
+  if (error) return <h1 className='text-white'>something went wrong :/</h1>;
 
   return (
     <>
       <Head>
         <title>{post.title}</title>
         <meta name='title' content={post.title} />
-        <meta name='description' content={post.content !== '' ? `posted by ${author.username}: ${post.content}` : `posted by ${author.username}: no description`} />
+        <meta name='description' content={post.content !== '' ? `posted by ${post.author.username}: ${post.content}` : `posted by ${post.author.username}: no description`} />
         <meta name='og:title' content={post.title} />
-        <meta name='og:description' content={post.content !== '' ? `posted by ${author.username}: ${post.content}` : `posted by ${author.username}: no description`} />
+        <meta name='og:description' content={post.content !== '' ? `posted by ${post.author.username}: ${post.content}` : `posted by ${post.author.username}: no description`} />
       </Head>
       <Navbar />
       <div className='grid grid-cols-[12%_80%] pt-[80px] pb-[50px]'>
@@ -94,7 +103,12 @@ const Post: NextPage<{ post: Post; author: Author }> = ({ post, author }) => {
             ) : (
               <div>
                 <div className='grid grid-cols-2'>
-                  <h2 className='text-white'>posted by {author.username}</h2>
+                  <h2 className='text-white'>
+                    posted by{' '}
+                    <Link href={`${useRouter().basePath}/users/${post.author.id}`}>
+                      <a className='font-medium'>{post.author.username}</a>
+                    </Link>
+                  </h2>
                   <h2 className='flex justify-end text-gray-400 text-sm'>{moment(parseFloat(data.post.createdAt)).fromNow()}</h2>
                 </div>
                 <h2 className='text-white font-medium break-words'>{post.title}</h2>
@@ -122,28 +136,22 @@ const Post: NextPage<{ post: Post; author: Author }> = ({ post, author }) => {
 };
 
 export const getServerSideProps = async ({ params }: any) => {
-  const queryPost = gql`
+  const query = gql`
     query ($id: ID!) {
       post(id: $id, commentsLimit: 0, commentsOffset: 0) {
         title
         content
-        author
+        author {
+          id
+          username
+        }
       }
     }
   `;
 
-  const queryAuthor = gql`
-    query ($id: ID!) {
-      user(id: $id) {
-        username
-      }
-    }
-  `;
+  const { data } = await client.query({ query, variables: { id: params.id } });
 
-  const { data } = await client.query({ query: queryPost, variables: { id: params.id } });
-  const author = await client.query({ query: queryAuthor, variables: { id: data.post.author } });
-
-  return { props: { post: data.post, author: author.data.user } };
+  return { props: { post: data.post } };
 };
 
 export default Post;

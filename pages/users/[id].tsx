@@ -72,8 +72,8 @@ const User: NextPage = ({ user, posts, comments }: any) => {
             ))}
           </div>
           <div id='comments' className='hidden'>
-            {comments.map(({ content, replyingTo, createdAt }: { content: string; replyingTo: string; createdAt: string }) => (
-              <UserComment content={content} createdAt={createdAt} replyingTo={replyingTo} />
+            {comments.map(({ id, content, replyingTo, createdAt }: { id: string; content: string; replyingTo: string; createdAt: string }, index: number) => (
+              <UserComment id={id} content={content} createdAt={createdAt} replyingTo={replyingTo} key={index} />
             ))}
           </div>
         </div>
@@ -108,7 +108,13 @@ export const getServerSideProps = async ({ params }: any) => {
     query ($user: ID!, $limit: Int!, $offset: Int!) {
       comments(user: $user, limit: $limit, offset: $offset) {
         content
-        replyingTo
+        replyingTo {
+          id
+          author {
+            id
+            username
+          }
+        }
         createdAt
       }
     }
