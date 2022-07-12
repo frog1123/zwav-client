@@ -7,7 +7,39 @@ import { UserPost } from '@components/UserPost';
 import { UserComment } from '@components/UserComment';
 import moment from 'moment';
 
-const User: NextPage = ({ user, posts, comments }: any) => {
+interface UserPageProps {
+  user: {
+    id: string;
+    username: string;
+    pfpLink: string;
+    bannerColor: string;
+    createdAt: string;
+  };
+  posts: Array<Post>;
+  comments: Array<Comment>;
+}
+
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+}
+
+interface Comment {
+  id: string;
+  content: string;
+  replyingTo: {
+    id: string;
+    author: {
+      id: string;
+      username: string;
+    };
+  };
+  createdAt: string;
+}
+
+const User: NextPage<UserPageProps> = ({ user, posts, comments }) => {
   const switchTabs = (tab: string) => {
     if (tab === 'posts') {
       document.getElementById('comments').classList.remove('block');
@@ -74,12 +106,12 @@ const User: NextPage = ({ user, posts, comments }: any) => {
           </div>
           <div className='bg-zwav-gray-100 h-[2px] w-[100%] rounded-[1px]'></div>
           <div id='posts'>
-            {posts.map(({ id, title, content, createdAt }: { id: string; title: string; content: string; createdAt: string }, index: number) => (
+            {posts.map(({ id, title, content, createdAt }: Post, index: number) => (
               <UserPost key={index} id={id} title={title} content={content} createdAt={createdAt} />
             ))}
           </div>
           <div id='comments' className='hidden'>
-            {comments.map(({ id, content, replyingTo, createdAt }: { id: string; content: string; replyingTo: string; createdAt: string }, index: number) => (
+            {comments.map(({ id, content, replyingTo, createdAt }: Comment, index: number) => (
               <UserComment id={id} content={content} createdAt={createdAt} replyingTo={replyingTo} key={index} />
             ))}
           </div>
