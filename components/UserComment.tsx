@@ -11,12 +11,12 @@ export const UserComment: FC<{ id: string; content: string; replyingTo: any; cre
         <h1 className='text-white'>
           replying to{' '}
           <Link href={`${useRouter().basePath}/posts/${props.replyingTo.id}`}>
-            <a className='text-white font-medium'>{parseTwemoji(props.replyingTo.author.username)}</a>
+            <a className='text-white font-medium'>{parseTwemoji(props.replyingTo.author.username, 'pointer')}</a>
           </Link>
         </h1>
         <h2 className='flex justify-end text-gray-400 text-sm'>{moment(parseFloat(props.createdAt)).fromNow()}</h2>
       </div>
-      <h2 className='text-white whitespace-pre-line'>{parseTwemoji(props.content)}</h2>
+      <h2 className='text-white cursor-text whitespace-pre-line'>{parseTwemoji(props.content, 'text')}</h2>
     </div>
   );
 };

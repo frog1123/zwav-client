@@ -6,6 +6,7 @@ import { Navbar } from '@components/Navbar';
 import { UserPost } from '@components/UserPost';
 import { UserComment } from '@components/UserComment';
 import moment from 'moment';
+import { parseTwemoji } from '@utils/parseTwemoji';
 
 interface UserPageProps {
   user: {
@@ -87,7 +88,7 @@ const User: NextPage<UserPageProps> = ({ user, posts, comments }) => {
               <img src={user.pfpLink} className='m-auto w-[80px] h-[80px]' />
             </div>
             <div className='bg-zwav-gray-300 w-[100%] flex justify-center rounded-b-[6px] pt-[10px]'>
-              <h2 className='text-white text-[40px]'>{user.username}</h2>
+              <h2 className='text-white cursor-text text-[40px]'>{parseTwemoji(user.username, 'text')}</h2>
             </div>
           </div>
         </div>
@@ -106,14 +107,30 @@ const User: NextPage<UserPageProps> = ({ user, posts, comments }) => {
           </div>
           <div className='bg-zwav-gray-100 h-[2px] w-[100%] rounded-[1px]'></div>
           <div id='posts'>
-            {posts.map(({ id, title, content, createdAt }: Post, index: number) => (
-              <UserPost key={index} id={id} title={title} content={content} createdAt={createdAt} />
-            ))}
+            {posts.length !== 0 ? (
+              <div>
+                {posts.map(({ id, title, content, createdAt }: Post, index: number) => (
+                  <UserPost key={index} id={id} title={title} content={content} createdAt={createdAt} />
+                ))}
+              </div>
+            ) : (
+              <div className='flex justify-center'>
+                <h1 className='text-white text-[20px]'>no posts from this user</h1>
+              </div>
+            )}
           </div>
           <div id='comments' className='hidden'>
-            {comments.map(({ id, content, replyingTo, createdAt }: Comment, index: number) => (
-              <UserComment id={id} content={content} createdAt={createdAt} replyingTo={replyingTo} key={index} />
-            ))}
+            {comments.length !== 0 ? (
+              <div>
+                {comments.map(({ id, content, replyingTo, createdAt }: Comment, index: number) => (
+                  <UserComment id={id} content={content} createdAt={createdAt} replyingTo={replyingTo} key={index} />
+                ))}
+              </div>
+            ) : (
+              <div className='flex justify-center'>
+                <h1 className='text-white text-[20px]'>no comments from this user</h1>
+              </div>
+            )}
           </div>
         </div>
       </div>

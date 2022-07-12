@@ -49,7 +49,7 @@ export const Navbar: FC = () => {
         {data ? (
           <div className='grid grid-cols-[max-content_max-content] gap-x-[8px]'>
             <Link href={`${router.basePath}/users/${data.user.id}`}>
-              <a className='text-white'>{parseTwemoji(data ? data.user.username : '')}</a>
+              <a className='text-white'>{parseTwemoji(data ? data.user.username : '', 'pointer')}</a>
             </Link>
             <h1 className='text-white cursor-pointer' onClick={() => logout()}>
               logout

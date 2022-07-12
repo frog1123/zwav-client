@@ -9,11 +9,11 @@ export const UserPost: FC<{ id: string; title: string; content: string; createdA
     <div className='bg-zwav-gray-400 rounded-[8px] m-[6px] p-[10px] break-words'>
       <div className='grid grid-cols-2'>
         <Link href={`${useRouter().basePath}/posts/${props.id}`}>
-          <h1 className='text-white font-medium cursor-pointer w-[max-content]'>{parseTwemoji(props.title)}</h1>
+          <h1 className='text-white font-medium cursor-pointer w-[max-content]'>{parseTwemoji(props.title, 'pointer')}</h1>
         </Link>
         <h2 className='w-[max-content] flex ml-[auto] text-gray-400 text-sm'>{moment(parseFloat(props.createdAt)).fromNow()}</h2>
       </div>
-      <h1 className='text-white whitespace-pre-line'>{parseTwemoji(props.content)}</h1>
+      <h1 className='text-white cursor-text whitespace-pre-line'>{parseTwemoji(props.content, 'text')}</h1>
     </div>
   );
 };
