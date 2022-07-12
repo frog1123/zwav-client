@@ -29,14 +29,12 @@ interface Author {
   username: string;
 }
 
-const Post: NextPage<{ post: Post; author: Author }> = ({ post, author }) => {
+const Post: NextPage<{ post: Post; author: Author }> = ({ post }) => {
+  const router = useRouter();
+
   const query = gql`
     query ($id: ID!, $commentsLimit: Int!, $commentsOffset: Int!) {
       post(id: $id, commentsLimit: $commentsLimit, commentsOffset: $commentsOffset) {
-        author {
-          id
-          username
-        }
         content
         createdAt
         comments {
@@ -105,7 +103,7 @@ const Post: NextPage<{ post: Post; author: Author }> = ({ post, author }) => {
                 <div className='grid grid-cols-2'>
                   <h2 className='text-white'>
                     posted by{' '}
-                    <Link href={`${useRouter().basePath}/users/${post.author.id}`}>
+                    <Link href={`${router.basePath}/users/${post.author.id}`}>
                       <a className='font-medium'>{post.author.username}</a>
                     </Link>
                   </h2>

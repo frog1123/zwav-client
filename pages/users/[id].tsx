@@ -67,8 +67,8 @@ const User: NextPage = ({ user, posts, comments }: any) => {
           </div>
           <div className='bg-zwav-gray-100 h-[2px] w-[100%] rounded-[1px]'></div>
           <div id='posts'>
-            {posts.map(({ id, title, content, createdAt }: { id: string; title: string; content: string; createdAt: string }) => (
-              <UserPost id={id} title={title} content={content} createdAt={createdAt} />
+            {posts.map(({ id, title, content, createdAt }: { id: string; title: string; content: string; createdAt: string }, index: number) => (
+              <UserPost key={index} id={id} title={title} content={content} createdAt={createdAt} />
             ))}
           </div>
           <div id='comments' className='hidden'>
