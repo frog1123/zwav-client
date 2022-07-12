@@ -15,7 +15,6 @@ export const Navbar: FC = () => {
       user(id: $id) {
         username
         id
-        email
         createdAt
       }
     }
