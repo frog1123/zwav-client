@@ -6,6 +6,7 @@ import { useQuery, gql } from '@apollo/client';
 import { useRouter } from 'next/router';
 
 import logo from '@public/zwav_logo.svg';
+import { parseTwemoji } from '@utils/parseTwemoji';
 
 export const Navbar: FC = () => {
   const router = useRouter();
@@ -48,7 +49,7 @@ export const Navbar: FC = () => {
         {data ? (
           <div className='grid grid-cols-[max-content_max-content] gap-x-[8px]'>
             <Link href={`${router.basePath}/users/${data.user.id}`}>
-              <a className='text-white'>{data ? data.user.username : ''}</a>
+              <a className='text-white'>{parseTwemoji(data ? data.user.username : '')}</a>
             </Link>
             <h1 className='text-white cursor-pointer' onClick={() => logout()}>
               logout

@@ -4,6 +4,7 @@ import { UserContext } from '../UserContext';
 import Cookie from 'js-cookie';
 import TextareaAutosize from 'react-textarea-autosize';
 import Link from 'next/link';
+import { parseTwemoji } from '@utils/parseTwemoji';
 
 export const CreatePost: FC = () => {
   let title: string | undefined, content: string | undefined;

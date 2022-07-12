@@ -30,9 +30,13 @@ body::-webkit-scrollbar-thumb {
   background: #888;
 }
 
-input[type='text'] {
-  line-height: 28px;
+.twemoji {
+  display: inline;
+  cursor: text;
+  width: 20px;
+  height: 20px;
 }
+
 /* input autocomplete */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

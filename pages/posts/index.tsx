@@ -16,6 +16,10 @@ const Posts: NextPage = () => {
     <>
       <Head>
         <title>zwav</title>
+        <meta name='title' content='zwav' />
+        <meta name='description' content='register and stuff it will be cool' />
+        <meta name='og:title' content='zwav' />
+        <meta name='og:description' content='register and stuff it will be cool' />
       </Head>
       <Navbar />
       <div className='grid grid-cols-[12%_80%] pt-[80px]'>

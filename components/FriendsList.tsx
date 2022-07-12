@@ -1,3 +1,4 @@
+import { parseTwemoji } from '@utils/parseTwemoji';
 import type { FC } from 'react';
 
 export const FriendsList: FC = () => {
@@ -13,7 +14,7 @@ export const FriendsList: FC = () => {
       {users.map(({ username, pfp }, index) => (
         <div key={index} className='grid grid-cols-[max-content_max-content] gap-x-[6px] p-[4px]'>
           <img src={pfp} className='rounded-[50%] object-cover aspect-square select-none' height='40px' width='40px' />
-          <h2 className='text-white self-center mr-[auto]'>{username}</h2>
+          <h2 className='text-white self-center mr-[auto]'>{parseTwemoji(username)}</h2>
         </div>
       ))}
     </div>
