@@ -49,8 +49,15 @@ const User: NextPage = ({ user, posts, comments }: any) => {
       </Head>
       <Navbar />
       <div className='pt-[80px] pb-[50px]'>
-        <div className='flex justify-center bg-zwav-gray-300 w-[95%] ml-[auto] mr-[auto] rounded-[8px]'>
-          <h2 className='text-white text-[40px]'>{user.username}</h2>
+        <div className='w-[95%] ml-[auto] mr-[auto] rounded-[8px] pt-[50px]' style={{ backgroundColor: user.bannerColor }}>
+          <div>
+            <div className='bg-zwav-gray-300 w-[max-content] m-auto p-[6px] rounded-[50%] mb-[-25px]'>
+              <img src={user.pfpLink} className='m-auto w-[80px] h-[80px]' />
+            </div>
+            <div className='bg-zwav-gray-300 w-[100%] flex justify-center rounded-b-[6px] pt-[10px]'>
+              <h2 className='text-white text-[40px]'>{user.username}</h2>
+            </div>
+          </div>
         </div>
         <div className='bg-zwav-gray-300 w-[95%] ml-[auto] mr-[auto] rounded-[8px] mt-[10px] p-[4px]'>
           <h2 className='text-white'>id {user.id}</h2>
@@ -88,6 +95,8 @@ export const getServerSideProps = async ({ params }: any) => {
       user(id: $id) {
         id
         username
+        pfpLink
+        bannerColor
         createdAt
       }
     }
