@@ -33,7 +33,7 @@ export const Navbar: FC = () => {
       <Link href='/posts'>
         <a className='grid grid-cols-2 place-items-center h-[100%]'>
           <div className='select-none m-[auto] h-[25px]'>
-            <Image src={logo} height={25} width={25} id='navbar-icon' />
+            <Image src={logo} height={25} width={25} id='navbar-icon' alt='' />
           </div>
           <h1 className='text-white'>zwav</h1>
         </a>

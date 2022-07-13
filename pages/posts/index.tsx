@@ -12,7 +12,7 @@ const Posts: NextPage = () => {
   const [loadCreatePost, setLoadCreatePost] = useState(false);
   const { value, setValue } = useContext(UserContext);
 
-  useEffect(() => setLoadCreatePost(true));
+  useEffect(() => setLoadCreatePost(true), []);
 
   if (typeof window !== 'undefined') {
     window.onscroll = () => {

@@ -85,7 +85,7 @@ const User: NextPage<UserPageProps> = ({ user, posts, comments }) => {
         <div className='w-[95%] ml-[auto] mr-[auto] rounded-[8px] pt-[50px]' style={{ backgroundColor: user.bannerColor }}>
           <div>
             <div className='bg-zwav-gray-300 w-[max-content] m-auto p-[6px] rounded-[50%] mb-[-25px]'>
-              <img src={user.pfpLink} className='m-auto w-[80px] h-[80px]' />
+              <img src={user.pfpLink} className='m-auto w-[80px] h-[80px]' alt='' />
             </div>
             <div className='bg-zwav-gray-300 w-[100%] flex justify-center rounded-b-[6px] pt-[10px]'>
               <h2 className='text-white cursor-text text-[40px]'>{parseTwemoji(user.username, 'text')}</h2>

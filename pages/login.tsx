@@ -85,7 +85,7 @@ const Login: NextPage = () => {
             </div>
             <div className='w-[100%] bg-zwav-gray-100 h-[2px] mt-[10px]'></div>
             <div className='flex justify-center pt-[6px]'>
-              <Image src='/zwav_logo.svg' width={20} height={20} />
+              <Image src='/zwav_logo.svg' width={20} height={20} alt='' />
             </div>
           </div>
         </div>

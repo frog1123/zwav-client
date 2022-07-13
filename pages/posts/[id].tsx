@@ -36,7 +36,7 @@ const Post: NextPage<{ post: Post }> = ({ post }) => {
   const [postId] = useState(useRouter().query.id.toString());
   const [loadCreateComment, setLoadCreateComment] = useState(false);
 
-  useEffect(() => setLoadCreateComment(true));
+  useEffect(() => setLoadCreateComment(true), []);
 
   return (
     <>
