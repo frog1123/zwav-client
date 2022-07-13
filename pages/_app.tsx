@@ -9,7 +9,9 @@ import { UserContext } from '../UserContext';
 const App = ({ Component, pageProps }: AppProps) => {
   const [value, setValue] = useState({
     reloadPostsList: false,
-    reloadCommentsList: false
+    fetchMorePostsList: false,
+    reloadCommentsList: false,
+    fetchMoreCommentsList: false
   });
 
   return (

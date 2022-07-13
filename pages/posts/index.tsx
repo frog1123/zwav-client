@@ -5,12 +5,21 @@ import { Navbar } from '@components/Navbar';
 import { CreatePost } from '@components/CreatePost';
 import { PostsList } from '@components/PostsList';
 import { FriendsList } from '@components/FriendsList';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { UserContext } from 'UserContext';
 
 const Posts: NextPage = () => {
   const [loadCreatePost, setLoadCreatePost] = useState(false);
+  const { value, setValue } = useContext(UserContext);
 
   useEffect(() => setLoadCreatePost(true));
+
+  if (typeof window !== 'undefined') {
+    window.onscroll = () => {
+      const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight;
+      if (bottom && value.fetchMorePostsList === false) setValue({ fetchMorePostsList: true });
+    };
+  }
 
   return (
     <>
@@ -26,9 +35,9 @@ const Posts: NextPage = () => {
         <div className='mr-[6px] ml-[6px]'>
           <FriendsList />
         </div>
-        <div className='grid grid-rows-[max-content_max_content]'>
+        <div className='grid grid-rows-[max-content_max_content_max-content] pb-[50px]'>
           {loadCreatePost ? <CreatePost /> : ''}
-          <div className='mt-[15px] pb-[50px] w-[100%] m-auto'>
+          <div className='mt-[15px] w-[100%] m-auto'>
             <PostsList />
           </div>
         </div>

@@ -34,7 +34,10 @@ export const CreateComment: FC<{ postId: string }> = props => {
 
   const handleKeyPress = (e: any) => {
     if (e.key === 'Enter' && e.shiftKey === true) return;
-    if (e.key === 'Enter') submitComment();
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      submitComment();
+    }
   };
 
   if (typeof Cookie.get('currentUserId') === 'undefined')

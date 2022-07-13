@@ -4,7 +4,6 @@ import { UserContext } from '../UserContext';
 import Cookie from 'js-cookie';
 import TextareaAutosize from 'react-textarea-autosize';
 import Link from 'next/link';
-import { parseTwemoji } from '@utils/parseTwemoji';
 
 export const CreatePost: FC = () => {
   let title: string | undefined, content: string | undefined;
@@ -39,8 +38,10 @@ export const CreatePost: FC = () => {
   };
 
   const handleKeyPressTitle = (e: any) => {
-    if (e.which == '13') e.preventDefault();
-    if (e.key === 'Enter') submitPost();
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      submitPost();
+    }
   };
 
   if (typeof Cookie.get('currentUserId') === 'undefined')
