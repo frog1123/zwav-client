@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
 import moment from 'moment';
 import { useContext, useEffect, useState } from 'react';
 

@@ -1,8 +1,8 @@
-import type { FC } from 'react';
+import { FC, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Cookie from 'js-cookie';
-import { useQuery, gql } from '@apollo/client';
+import { useLazyQuery, useQuery, gql } from '@apollo/client';
 import { useRouter } from 'next/router';
 
 import logo from '@public/zwav_logo.svg';
@@ -21,10 +21,32 @@ export const Navbar: FC = () => {
     }
   `;
 
+  const logoutQuery = gql`
+    query {
+      logout
+    }
+  `;
+
+  const refreshQuery = gql`
+    query {
+      refreshUser
+    }
+  `;
+
   const { data } = useQuery(query, { variables: { id: Cookie.get('currentUserId') } });
+  const [reqLogout] = useLazyQuery(logoutQuery);
+  const [refreshUser, { refetch }] = useLazyQuery(refreshQuery);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const logout = () => {
-    Cookie.remove('currentUserId', { path: '' });
+    reqLogout();
     router.reload();
   };
 
